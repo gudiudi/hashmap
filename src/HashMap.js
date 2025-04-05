@@ -37,14 +37,13 @@ export default class HashMap {
 	}
 
 	set(key, value) {
-		const index = this.#hash(key);
 		const node = this.#search(key);
-
 		if (node) {
 			node.value = value;
 			return;
 		}
 
+		const index = this.#hash(key);
 		const newNode = new Node(key, value, this.#buckets[index]);
 		this.#buckets[index] = newNode;
 		this.#size++;
