@@ -21,17 +21,13 @@ export default class HashMap {
 			hashCode = primeNumber * hashCode + char.charCodeAt();
 		}
 
-		return hashCode % this.#buckets.length;
+		return Math.abs(hashCode) % this.#buckets.length;
 	}
 
 	set(key, value) {
 		const index = this.#hash(key);
-
-		if (index < 0 || index >= this.#buckets.length) {
-			throw new Error("Trying to access index out of bounds");
-		}
-
 		const newNode = new Node(key, value);
+
 		let currentNode = this.#buckets[index];
 
 		if (!currentNode) {
