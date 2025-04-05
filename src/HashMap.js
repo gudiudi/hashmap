@@ -24,29 +24,6 @@ export default class HashMap {
 		return Math.abs(hashCode) % this.#buckets.length;
 	}
 
-	set(key, value) {
-		const index = this.#hash(key);
-		const newNode = new Node(key, value);
-		let currentNode = this.#buckets[index];
-
-		if (!currentNode) {
-			this.#buckets[index] = newNode;
-			this.#size++;
-			return;
-		}
-
-		while (currentNode.nextNode) {
-			if (currentNode.key === key) {
-				currentNode.value = value;
-				return;
-			}
-			currentNode = currentNode.nextNode;
-		}
-
-		currentNode.nextNode = newNode;
-		this.#size++;
-	}
-
 	#search(key, callback = (node) => node.key === key) {
 		const index = this.#hash(key);
 		let currentNode = this.#buckets[index];
@@ -57,6 +34,20 @@ export default class HashMap {
 		}
 
 		return null;
+	}
+
+	set(key, value) {
+		const index = this.#hash(key);
+		const node = this.#search(key);
+
+		if (node) {
+			node.value = value;
+			return;
+		}
+
+		const newNode = new Node(key, value, this.#buckets[index]);
+		this.#buckets[index] = newNode;
+		this.#size++;
 	}
 
 	get(key) {
