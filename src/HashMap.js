@@ -13,6 +13,32 @@ export default class HashMap {
 		this.#size = 0;
 	}
 
+	set(key, value) {
+		const node = this.#search(key);
+		if (node) {
+			node.value = value;
+			return;
+		}
+
+		const index = this.#hash(key);
+		const newNode = new Node(key, value, this.#buckets[index]);
+		this.#buckets[index] = newNode;
+		this.#size++;
+	}
+
+	get(key) {
+		const node = this.#search(key);
+		return node?.value ?? null;
+	}
+
+	has(key) {
+		return !!this.#search(key);
+	}
+
+	get size() {
+		return this.#size;
+	}
+
 	#hash(key) {
 		if (typeof key !== "string") throw new Error("Key must be a string");
 		if (key.length === 0) throw new Error("Key cannot be empty");
@@ -37,27 +63,5 @@ export default class HashMap {
 		}
 
 		return null;
-	}
-
-	set(key, value) {
-		const node = this.#search(key);
-		if (node) {
-			node.value = value;
-			return;
-		}
-
-		const index = this.#hash(key);
-		const newNode = new Node(key, value, this.#buckets[index]);
-		this.#buckets[index] = newNode;
-		this.#size++;
-	}
-
-	get(key) {
-		const node = this.#search(key);
-		return node?.value ?? null;
-	}
-
-	has(key) {
-		return !!this.#search(key);
 	}
 }
