@@ -6,7 +6,7 @@ map.set("Sara", "red");
 map.set("Rasa", "yellow");
 map.set("Sara", "black");
 console.log(map.get("Armin"));
-console.log(map.get("Rasa"));
+
 /*
 Move linked list method to new linked list class!
 */

@@ -48,16 +48,26 @@ export default class HashMap {
 		this.#size++;
 	}
 
-	get(key) {
+	#search(key, callback = null) {
 		const index = this.#hash(key);
 
 		let currentNode = this.#buckets[index];
 
 		while (currentNode) {
-			if (currentNode.key === key) return currentNode.value;
+			if (callback?.(currentNode)) return currentNode;
 			currentNode = currentNode.nextNode;
 		}
 
 		return null;
+	}
+
+	get(key) {
+		const node = this.#search(key, (node) => node.key === key);
+		return node ? node.value : null;
+	}
+
+	has(key) {
+		const node = this.#search(key, (node) => node.key === key);
+		return !!node;
 	}
 }
