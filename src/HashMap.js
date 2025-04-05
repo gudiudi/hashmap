@@ -4,11 +4,13 @@ export default class HashMap {
 	#capacity;
 	#loadFactor;
 	#buckets;
+	#size;
 
 	constructor() {
 		this.#capacity = 12;
 		this.#loadFactor = 0.75;
 		this.#buckets = new Array(this.#capacity).fill(null);
+		this.#size = 0;
 	}
 
 	#hash(key) {
@@ -34,6 +36,7 @@ export default class HashMap {
 
 		if (!currentNode) {
 			this.#buckets[index] = newNode;
+			this.#size++;
 			return;
 		}
 
@@ -46,5 +49,6 @@ export default class HashMap {
 		}
 
 		currentNode.nextNode = newNode;
+		this.#size++;
 	}
 }
