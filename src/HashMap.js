@@ -3,10 +3,12 @@ import Node from "./Node.js";
 export default class HashMap {
 	#capacity;
 	#loadFactor;
+	#buckets;
 
 	constructor() {
 		this.#capacity = 12;
 		this.#loadFactor = 0.75;
+		this.#buckets = new Array(this.#capacity).fill([]);
 	}
 
 	hash(key) {
@@ -17,6 +19,6 @@ export default class HashMap {
 			hashCode = primeNumber * hashCode + char.charCodeAt();
 		}
 
-		return hashCode % this.#capacity;
+		return hashCode % this.#buckets.length;
 	}
 }
