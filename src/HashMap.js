@@ -14,6 +14,9 @@ export default class HashMap {
 	}
 
 	#hash(key) {
+		if (typeof key !== "string") throw new Error("Key must be a string");
+		if (key.length === 0) throw new Error("Key cannot be empty");
+
 		const primeNumber = 31;
 		let hashCode = 0;
 
