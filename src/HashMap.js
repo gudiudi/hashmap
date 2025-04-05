@@ -51,4 +51,17 @@ export default class HashMap {
 		currentNode.nextNode = newNode;
 		this.#size++;
 	}
+
+	get(key) {
+		const index = this.#hash(key);
+
+		let currentNode = this.#buckets[index];
+
+		while (currentNode) {
+			if (currentNode.key === key) return currentNode.value;
+			currentNode = currentNode.nextNode;
+		}
+
+		return null;
+	}
 }
