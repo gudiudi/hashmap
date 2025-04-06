@@ -61,16 +61,7 @@ export default class HashMap {
 
 	keys() {
 		const result = [];
-
-		for (const headNode of this.#buckets) {
-			if (!headNode) continue;
-			let currentNode = headNode;
-			while (currentNode) {
-				result.push(currentNode.key);
-				currentNode = currentNode.nextNode;
-			}
-		}
-
+		this.#traverseBuckets(this.#buckets, (node) => result.push(node.key));
 		return result;
 	}
 
@@ -110,12 +101,15 @@ export default class HashMap {
 		const oldBuckets = this.#buckets;
 		this.#capacity *= 2;
 		this.clear();
+		this.#traverseBuckets(oldBuckets, (node) => this.set(node.key, node.value));
+	}
 
-		for (const headNode of oldBuckets) {
+	#traverseBuckets(buckets, callback) {
+		for (const headNode of buckets) {
 			if (!headNode) continue;
 			let currentNode = headNode;
 			while (currentNode) {
-				this.set(currentNode.key, currentNode.value);
+				callback(currentNode);
 				currentNode = currentNode.nextNode;
 			}
 		}
