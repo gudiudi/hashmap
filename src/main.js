@@ -13,6 +13,7 @@ console.log(map.get("Sara"));
 console.log(map.remove("Sara"));
 console.log(map.get("Sara"));
 
+console.log(map.keys());
 // head rasa > sara
 /*
 Move linked list method to new linked list class!
