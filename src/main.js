@@ -15,6 +15,7 @@ console.log(map.get("Sara"));
 
 console.log(map.keys());
 console.log(map.values());
+console.log(map.entries());
 // head rasa > sara
 /*
 Move linked list method to new linked list class!
