@@ -7,13 +7,15 @@ export default class HashMap {
 	#size;
 
 	constructor() {
-		this.#capacity = 12;
+		this.#capacity = 16;
 		this.#loadFactor = 0.75;
 		this.#buckets = new Array(this.#capacity).fill(null);
 		this.#size = 0;
 	}
 
 	set(key, value) {
+		if (this.#size >= this.#capacity * this.#loadFactor) this.#resize();
+
 		const node = this.#search(key);
 		if (node) {
 			node.value = value;
@@ -63,5 +65,21 @@ export default class HashMap {
 		}
 
 		return null;
+	}
+
+	#resize() {
+		const oldBuckets = this.#buckets;
+		this.#capacity *= 2;
+		this.#buckets = new Array(this.#capacity).fill(null);
+		this.#size = 0;
+
+		for (const headNode of oldBuckets) {
+			if (!headNode) continue;
+			let currentNode = headNode;
+			while (currentNode) {
+				this.set(currentNode.key, currentNode.value);
+				currentNode = currentNode.nextNode;
+			}
+		}
 	}
 }
