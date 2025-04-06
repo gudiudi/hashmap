@@ -65,6 +65,12 @@ export default class HashMap {
 		return result;
 	}
 
+	values() {
+		const result = [];
+		this.#traverseBuckets(this.#buckets, (node) => result.push(node.value));
+		return result;
+	}
+
 	get size() {
 		return this.#size;
 	}
