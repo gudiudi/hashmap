@@ -16,9 +16,9 @@ export default class HashMap {
 	set(key, value) {
 		if (this.#size >= this.#capacity * this.#loadFactor) this.#resize();
 
-		const node = this.#search(key);
-		if (node) {
-			node.value = value;
+		const { currentNode } = this.#search(key);
+		if (currentNode) {
+			currentNode.value = value;
 			return;
 		}
 
@@ -29,12 +29,29 @@ export default class HashMap {
 	}
 
 	get(key) {
-		const node = this.#search(key);
-		return node?.value ?? null;
+		const { currentNode } = this.#search(key);
+		return currentNode?.value ?? null;
 	}
 
 	has(key) {
-		return !!this.#search(key);
+		return !!this.#search(key).currentNode;
+	}
+
+	remove(key) {
+		const { prevNode, currentNode } = this.#search(key);
+
+		if (!currentNode) return false;
+
+		const index = this.#hash(key);
+
+		if (!prevNode) {
+			this.#buckets[index] = currentNode.nextNode;
+		} else {
+			prevNode.nextNode = currentNode.nextNode;
+		}
+
+		this.#size--;
+		return true;
 	}
 
 	get size() {
@@ -57,14 +74,16 @@ export default class HashMap {
 
 	#search(key, callback = (node) => node.key === key) {
 		const index = this.#hash(key);
+		let prevNode = null;
 		let currentNode = this.#buckets[index];
 
 		while (currentNode) {
-			if (callback(currentNode)) return currentNode;
+			if (callback(currentNode)) return { prevNode, currentNode };
+			prevNode = currentNode;
 			currentNode = currentNode.nextNode;
 		}
 
-		return null;
+		return { prevNode: null, currentNode: null };
 	}
 
 	#resize() {
