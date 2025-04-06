@@ -94,8 +94,7 @@ export default class HashMap {
 	#resize() {
 		const oldBuckets = this.#buckets;
 		this.#capacity *= 2;
-		this.#buckets = new Array(this.#capacity).fill(null);
-		this.#size = 0;
+		this.clear();
 
 		for (const headNode of oldBuckets) {
 			if (!headNode) continue;
