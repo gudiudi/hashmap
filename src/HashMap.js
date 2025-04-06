@@ -60,23 +60,15 @@ export default class HashMap {
 	}
 
 	keys() {
-		const result = [];
-		this.#traverseBuckets(this.#buckets, (node) => result.push(node.key));
-		return result;
+		return this.#collect((node) => node.key);
 	}
 
 	values() {
-		const result = [];
-		this.#traverseBuckets(this.#buckets, (node) => result.push(node.value));
-		return result;
+		return this.#collect((node) => node.value);
 	}
 
 	entries() {
-		const result = [];
-		this.#traverseBuckets(this.#buckets, (node) =>
-			result.push([node.key, node.value]),
-		);
-		return result;
+		return this.#collect((node) => [node.key, node.value]);
 	}
 
 	get size() {
@@ -98,6 +90,10 @@ export default class HashMap {
 	}
 
 	#search(key, callback = (node) => node.key === key) {
+		if (typeof callback !== "function") {
+			throw new TypeError("Expected a function as callback");
+		}
+
 		const index = this.#hash(key);
 		let prevNode = null;
 		let currentNode = this.#buckets[index];
@@ -119,13 +115,29 @@ export default class HashMap {
 	}
 
 	#traverseBuckets(buckets, callback) {
+		if (typeof callback !== "function") {
+			throw new TypeError("Expected a function as callback");
+		}
+
 		for (const headNode of buckets) {
 			if (!headNode) continue;
 			let currentNode = headNode;
 			while (currentNode) {
-				if (callback) callback(currentNode);
+				callback(currentNode);
 				currentNode = currentNode.nextNode;
 			}
 		}
+	}
+
+	#collect(callback) {
+		if (typeof callback !== "function") {
+			throw new TypeError("Expected a function as callback");
+		}
+
+		const result = [];
+		this.#traverseBuckets(this.#buckets, (node) => {
+			result.push(callback(node));
+		});
+		return result;
 	}
 }
