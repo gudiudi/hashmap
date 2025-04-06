@@ -109,7 +109,7 @@ export default class HashMap {
 			if (!headNode) continue;
 			let currentNode = headNode;
 			while (currentNode) {
-				callback(currentNode);
+				if (callback) callback(currentNode);
 				currentNode = currentNode.nextNode;
 			}
 		}
