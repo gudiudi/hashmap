@@ -54,6 +54,11 @@ export default class HashMap {
 		return true;
 	}
 
+	clear() {
+		this.#buckets = new Array(this.#capacity).fill(null);
+		this.#size = 0;
+	}
+
 	get size() {
 		return this.#size;
 	}
